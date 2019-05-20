@@ -1,0 +1,14 @@
+﻿  main.c
+d:\work\github\kkasm_emulator\kkasm_emulator\main.c(548): warning C4244: функция: преобразование "time_t" в "unsigned int", возможна потеря данных
+  vm.c
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(837): warning C4047: функция: "vmopvalue_t" отличается по уровням косвенного обращения от "vmopvalue_t *"
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(837): warning C4024: vm_set_operand: различные типы для формального и фактического параметров 4
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(841): warning C4047: функция: "vmopvalue_t" отличается по уровням косвенного обращения от "vmopvalue_t *"
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(841): warning C4024: vm_set_operand: различные типы для формального и фактического параметров 4
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(845): warning C4047: функция: "vmopvalue_t" отличается по уровням косвенного обращения от "vmopvalue_t *"
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(845): warning C4024: vm_set_operand: различные типы для формального и фактического параметров 4
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(1623): warning C4477: "printf": в строке форматирования "%08p" требуется аргумент типа "void *", но вариативный аргумент "1" имеет тип "unsigned int"
+  vmvideo.c
+  Создание кода...
+d:\work\github\kkasm_emulator\kkasm_emulator\vm.c(336): warning C4715: vm_check_flags: значение возвращается не при всех путях выполнения
+  kkasm_emulator.vcxproj -> D:\work\github\kkasm_emulator\Debug\kkasm_emulator.exe
