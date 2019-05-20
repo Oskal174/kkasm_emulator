@@ -2,6 +2,8 @@
 Debug/*
 kkasm_emulator/Debug/*
 kkasm_emulator/kkasm_emulator.vcxproj.user
+x64/*
+kkasm_emulator/x64/*
 
 # Prerequisites
 *.d
