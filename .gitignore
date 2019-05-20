@@ -1,3 +1,8 @@
+.vs/*
+Debug/*
+kkasm_emulator/Debug/*
+kkasm_emulator/kkasm_emulator.vcxproj.user
+
 # Prerequisites
 *.d
 
