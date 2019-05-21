@@ -151,7 +151,7 @@ HWND CreateMainWindow (void){
                           hIns, NULL);
 
     if(hwnd == NULL) {
-        MessageBox(NULL, "Ошибка создания основного окна приложения", "", MB_OK);
+        MessageBox(NULL, "Error creating the main application window", "", MB_OK);
         return NULL;
     }
 
@@ -315,12 +315,13 @@ HANDLE OpenCodeFile (HWND mainWindow, HINSTANCE ins) {
 
 //--------------------
 
-void LoadCode (HWND hwnd) {
+void LoadCode(HWND hwnd) {
     RWinStruct *rws;
     HANDLE fd;
     BYTE *code;
     DWORD fileSize;
     DWORD numBytes;
+    DWORD sig;
 
     if (!(rws = (RWinStruct*)GetWindowLong(hwnd, 0))) {
         return;
@@ -330,17 +331,24 @@ void LoadCode (HWND hwnd) {
         return;
     }
 
-    fileSize = GetFileSize (fd, NULL);
+    fileSize = GetFileSize(fd, NULL);
     if (code = (BYTE*)malloc(fileSize)) {
         ReadFile(fd, code, fileSize, &numBytes, NULL);
-        vm_load_code(rws->vm, code, fileSize);
+        
+        if (!(code[0] == 'K' && code[1] == 'A' && code[2] == 'S' && code[3] == 'M')) {
+            MessageBox(NULL, "Cannot find a special signature in binary file", "", MB_OK);
+            free(code);
+            CloseHandle(fd);
+            return;
+        }
+        
+        vm_load_code(rws->vm, code + 4, fileSize - 4);
         LoadVmReg(hwnd);
         DisasVmIns(hwnd);
         free(code);
     }
 
-    CloseHandle (fd);
-
+    CloseHandle(fd);
     return;
 }
 
@@ -417,7 +425,7 @@ void DisasVmIns(HWND hwnd) {
 
 	ip = (unsigned int)vm_get_current_instruction(rws->vm);
 
-	VM_INSTRUCTION_SIZE = vm_getCurrentInstSize((vm_instruction*)ip);
+	VM_INSTRUCTION_SIZE = vm_get_instruction_size((vm_instruction*)ip);
 
 	SetWindowText(rws->disasWindow, "");
 	//11 строк на экране
@@ -426,7 +434,7 @@ void DisasVmIns(HWND hwnd) {
 		else buf[0] = ' ';
 
 		bufSize = vm_get_disas_ins(rws->vm, (vm_instruction*)ip, buf + 2) + 2;
-		VM_INSTRUCTION_SIZE = vm_getCurrentInstSize((vm_instruction*)ip);
+		VM_INSTRUCTION_SIZE = vm_get_instruction_size((vm_instruction*)ip);
 		ip += VM_INSTRUCTION_SIZE;
 
 		buf[bufSize] = '\r';
@@ -502,14 +510,14 @@ LRESULT CALLBACK WndProcMain (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam
         break;
 
     case WM_TIMER:
-        vm_setCurrentKey(rws->vm, 0);
+        vm_set_key(rws->vm, 0);
         KillTimer(hwnd, TIMER_1);
         RunCode(hwnd);
 
         return 0;
 
     case WM_KEYDOWN:
-        vm_setCurrentKey(rws->vm, wParam);
+        vm_set_key(rws->vm, wParam);
         KillTimer(hwnd, TIMER_1);
         RunCode(hwnd);
 

@@ -77,23 +77,26 @@ typedef int BOOL;
 #endif
 
 //----------------------------------------
-unsigned int vm_getCurrentInstSize(vm_instruction *ins);
-void vm_setCurrentKey(vm_struct *vm, int keyCode);
-
-vm_instruction * vm_get_current_instruction(vm_struct *vm);
-vmopvalue_t vm_get_ip(vm_struct *vm);
-vm_ins_result vm_set_ip(vm_struct *vm, vmopvalue_t value);
-extern vm_ins_result vm_run_current_instruction(vm_struct *vm);
-extern vm_state vm_run(vm_struct *vm);
 extern vm_struct * create_vm(HWND hwnd);
 void destroy_vm(vm_struct *vm);
-BOOL vm_load_code(vm_struct *vm, unsigned char *code, unsigned int code_size);
-void vm_trace(vm_struct *vm);
+
+extern vm_ins_result vm_run_current_instruction(vm_struct *vm);
+extern vm_state vm_run(vm_struct *vm);
+
+void vm_set_key(vm_struct *vm, int keyCode);
+vm_ins_result vm_set_ip(vm_struct *vm, vmopvalue_t value);
+
+unsigned int vm_get_instruction_size(vm_instruction *ins);
+vm_instruction * vm_get_current_instruction(vm_struct *vm);
+vmopvalue_t vm_get_ip(vm_struct *vm);
 vmopvalue_t vm_get_reg_full(vm_struct *vm, unsigned int reg_number);
 unsigned int vm_get_disas_ins(vm_struct *vm, vm_instruction *ins, char *buf);
+
+BOOL vm_load_code(vm_struct *vm, unsigned char *code, unsigned int code_size);
+
+void vm_trace(vm_struct *vm);
 void vm_print_error(vm_struct *vm);
 
 //----------------------------------------
 
 #endif  // _VM_H_
-

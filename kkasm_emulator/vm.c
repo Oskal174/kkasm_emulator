@@ -132,9 +132,6 @@ unsigned int currentKey;
 
 //----------------------------------------
 
-//unsigned int vm_getCurrentInstSize(vm_instruction *ins);
-void vm_setCurrentKey(vm_struct *vm, int keyCode);
-
 static unsigned int vm_disas_operand(vm_operand_type opType, vmopvalue_t opValue, char *buf);
 
 static unsigned int vm_get_dword(vm_struct *vm);
@@ -204,13 +201,13 @@ vm_jmp, vm_ja, vm_jae, vm_jb, vm_jbe, vm_je, vm_jne, vm_call, vm_get, vm_rand, v
 
 //----------------------------------------
 
-void vm_setCurrentKey(vm_struct *vm, int keyCode) {
+void vm_set_key(vm_struct *vm, int keyCode) {
 	currentKey = keyCode;
 	return;
 }
 
 
-unsigned int vm_getCurrentInstSize(vm_instruction *ins) {
+unsigned int vm_get_instruction_size(vm_instruction *ins) {
 	unsigned int size = 0;
     switch (ins->opcode) {
     case VM_NOP:
@@ -1292,7 +1289,7 @@ unsigned int vm_get_disas_ins (vm_struct *vm, vm_instruction *ins, char *buf) {
 	unsigned int offset = 0;
 	unsigned int i;
 
-	VM_INSTRUCTION_SIZE = vm_getCurrentInstSize(ins);
+	VM_INSTRUCTION_SIZE = vm_get_instruction_size(ins);
 
     if (ins->opcode >= VM_COUNT_INST) {
         return sprintf(buf, "invalid instruction\n");
@@ -1343,11 +1340,10 @@ static void vm_print_context(vm_struct *vm) {
 
 //--------------------
 vm_ins_result vm_run_current_instruction(vm_struct *vm) {
-
     vm_ins_result res;
     vm_instruction *ip = vm_get_current_instruction(vm);
 
-    VM_INSTRUCTION_SIZE = vm_getCurrentInstSize(ip);
+    VM_INSTRUCTION_SIZE = vm_get_instruction_size(ip);
 
     if (vm->state != VM_STATE_OK && vm->state != VM_STATE_WAIT) {
         return VM_RESULT_UNKNOW_ERROR;
@@ -1436,9 +1432,6 @@ void destroy_vm(vm_struct *vm) {
 
 //--------------------
 
-//
-// Загружает код в виртуальную машину
-//
 BOOL vm_load_code(vm_struct *vm, unsigned char *code, unsigned int code_size) {
     if (code_size < VM_MEM_SIZE - VM_CODE_START) {
         vm_init(vm);
